@@ -13,7 +13,7 @@
       <servlet-name>jersey-services</servlet-name>
       <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
       <init-param>
-          <param-name>jersey.config.server.provider.packages</param-name>
+          <param-name>com.sun.jersey.config.property.packages</param-name>
           <param-value>busyShedule</param-value>
       </init-param>
       <init-param>

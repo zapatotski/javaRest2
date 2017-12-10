@@ -4,8 +4,8 @@ import busyShedule.model.dao.CompetitionDao;
 import busyShedule.model.dao.GameDao;
 
 public class RefreshManager {
-	
-	String[] hrefs={
+
+	String[] hrefs = {
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/argentina/Primera",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/argentina/primerab",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/argentina/Cup",
@@ -48,10 +48,10 @@ public class RefreshManager {
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/FACup",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/PremierLeague",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/SuperCup",
-                        "http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/LeagueOne",
-                        "http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/LeagueTwo",
-                        "http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/FATrophy",
-                        "http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/FLTrophy",
+			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/LeagueOne",
+			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/LeagueTwo",
+			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/FATrophy",
+			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/FLTrophy",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/england/CarlingCup",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/eurocups/champleague",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/eurocups/europaleague",
@@ -139,11 +139,11 @@ public class RefreshManager {
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/usa/MLS",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/usa/NASL",
 			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/wales/PremierLeague",
-			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/wales/FACup"
-	};
-	
-	public void updateData(){
+			"http://www.goalserve.com/getfeed/0f753737311c4e49a6c86f26264d4ae9/soccerfixtures/wales/FACup" };
+
+	public void updateData() {
 		new GameDao().setGames(Parser.parse(hrefs));
-		new CompetitionDao().setTeams(Parser.mapCompetition);;
+		new CompetitionDao().setTeams(Parser.mapCompetition);
+		;
 	}
 }

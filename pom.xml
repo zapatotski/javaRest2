@@ -86,25 +86,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-                <plugin>
-     <groupId>org.apache.tomcat.maven</groupId>
-     <artifactId>tomcat7-maven-plugin</artifactId>
-     <version>2.2</version>
-     <configuration>
-<!-- Include context file for Datasource configuration -->
-     <contextFile>./src/main/webapp/META-INF/context.xml</contextFile>
-    <port>8080</port>
-     </configuration>
-     <dependencies>
-<!-- Include jdbc driver dependency if using datasource (in my case oracle) -->
-    <dependency>
-        <groupId>com.oracle</groupId>
-        <artifactId>ojdbc6</artifactId>
-        <version>11.2.0.4.0</version>
-    </dependency>
-  </dependencies>
-    </plugin>
         </plugins>
 
 

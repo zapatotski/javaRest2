@@ -12,7 +12,7 @@
 <%@ page import="live.Game" %>
 <%@ page import="live.Player" %>
 
-
+<%! 
 File dir = new File(".");
 File[] files = dir.listFiles(new FilenameFilter() {
     public boolean accept(File dir, String name) {

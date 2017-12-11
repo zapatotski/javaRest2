@@ -61,7 +61,7 @@ public class GameDao {
 	    finally{
         	try{
         		fInput.close();
-        		oInput.сlose();
+                oInput.close();
         	}
         	catch(Exception ex){
         		throw new RuntimeException(ex);

@@ -144,8 +144,10 @@ public class Parser {
 
 				if (!mapCompetition.containsKey(competition.id))
 					mapCompetition.put(competition.id, competition.teams);
-				else
-					mapCompetition.replace(competition.id, competition.teams);
+				else{
+                    mapCompetition.remove(competition.id);
+					mapCompetition.put(competition.id, competition.teams);				
+				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

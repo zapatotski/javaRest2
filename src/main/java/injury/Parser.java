@@ -55,8 +55,7 @@ public class Parser {
 		Connection conn = null;
 		try {
 		    conn =
-				       DriverManager.getConnection("jdbc:mysql://irkm0xtlo2pcmvvz.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/n6k9rv1ttdcbdfjs"+
-		                       "user=kadleoo680ohktm7&password=y8t6btem56z2c1tr");		    		    
+				       DriverManager.getConnection("jdbc:mysql://kadleoo680ohktm7:y8t6btem56z2c1tr@irkm0xtlo2pcmvvz.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/n6k9rv1ttdcbdfjs");		    		    
 		} catch (SQLException ex) {
 		    // handle any errors
 		    System.out.println("SQLException: " + ex.getMessage());
@@ -173,8 +172,7 @@ public class Parser {
 		
 		try {
 		    conn =
-		       DriverManager.getConnection("jdbc:mysql://irkm0xtlo2pcmvvz.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/n6k9rv1ttdcbdfjs"+
-                       "user=kadleoo680ohktm7&password=y8t6btem56z2c1tr");	
+		       DriverManager.getConnection("jdbc:mysql://kadleoo680ohktm7:y8t6btem56z2c1tr@irkm0xtlo2pcmvvz.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/n6k9rv1ttdcbdfjs");	
 		    		    
 		} catch (SQLException ex) {
 		    // handle any errors

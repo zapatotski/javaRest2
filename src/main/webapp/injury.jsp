@@ -25,8 +25,6 @@ public File[] sortFile(File[] fs){
 	return fs;
 }
 
-File f=new File("matchiinjury.xml");
-
 public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, File[] files){
 	for(int i=files.length-1;i>files.length-7;i--){
 		Map<String, List<Game>> lastlist=deserialization(files[i]);
@@ -59,6 +57,7 @@ public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, File[] file
 	}
 	return m;
 }
+
 
 public Map<String,List<Game>> deserialization(File f){
 	FileInputStream fInput=null;
@@ -278,7 +277,7 @@ setInterval(function(){
 		<div class="content">
 		<div style="clear:both"></div>	
 			<%		
-			Map<String,List<Game>> map=deserialization(f);
+			Map<String,List<Game>> map=deserialization(new File("matchiinjury.xml"));
 			//map=addLastGames(map,sortFile(files));
 			Set key=map.keySet();
 			

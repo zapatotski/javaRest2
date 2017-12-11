@@ -32,10 +32,11 @@ File f=new File("matchiinjury.xml");
         }
         finally{
         	try{
+                fOut.close();
         		oOut.close();
         	}
-        	catch(Exception e){
-        		throw new RuntimeException(e);
+        	catch(Exception ex){
+        		throw new RuntimeException(ex);
         	}
         }
     }

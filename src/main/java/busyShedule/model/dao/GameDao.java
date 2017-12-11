@@ -36,6 +36,15 @@ public class GameDao {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		finally{
+        	try{
+        		fOut.close();
+        		oOut.close();
+        	}
+        	catch(Exception ex){
+        		throw new RuntimeException(ex);
+        	}
+        }
 	}
 
 	public Object deserialization(File f) {
@@ -49,6 +58,15 @@ public class GameDao {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	    finally{
+        	try{
+        		fInput.close();
+        		oInput.lose();
+        	}
+        	catch(Exception ex){
+        		throw new RuntimeException(ex);
+        	}
+        }
 		return result;
 	}
 

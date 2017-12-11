@@ -67,6 +67,10 @@ public class Parser {
 		    System.out.println("SQLState: " + ex.getSQLState());
 		    System.out.println("VendorError: " + ex.getErrorCode());
 		}
+		catch (Exception ex2) {
+		    // handle any errors
+		    System.out.println(ex2);
+		}
 		
 		ResultSet result=null;
 		PreparedStatement statement=null;
@@ -187,6 +191,10 @@ public class Parser {
 		    System.out.println("SQLException: " + ex.getMessage());
 		    System.out.println("SQLState: " + ex.getSQLState());
 		    System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		catch (Exception ex2) {
+		    // handle any errors
+		    System.out.println(ex2);
 		}
 		
 		Statement stmt = null;

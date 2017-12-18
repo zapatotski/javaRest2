@@ -131,7 +131,7 @@ public class Parser {
 						new Date(dataArr[2] - 1900, dataArr[1] - 1, dataArr[0]));
 
 				if (!mapGame.containsKey(team1Id))
-					mapGame.put(team1Id, new PriorityQueue<Game>(new Comparator<Game>() {
+					mapGame.put(team1Id, new PriorityQueue<Game>(11,new Comparator<Game>() {
 						public int compare(Game t, Game t1) {
 							if (t.date.getTime() < t1.date.getTime())
 								return -1;
@@ -143,7 +143,7 @@ public class Parser {
 					}));
 
 				if (!mapGame.containsKey(team2Id))
-					mapGame.put(team2Id, new PriorityQueue<Game>(new Comparator<Game>() {
+					mapGame.put(team2Id, new PriorityQueue<Game>(11,new Comparator<Game>() {
 						public int compare(Game t, Game t1) {
 							if (t.date.getTime() < t1.date.getTime())
 								return -1;

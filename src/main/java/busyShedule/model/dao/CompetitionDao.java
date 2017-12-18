@@ -33,15 +33,6 @@ public class CompetitionDao {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		 finally{
-        	try{
-        		fOut.close();
-        		oOut.close();
-        	}
-        	catch(Exception ex){
-        		throw new RuntimeException(ex);
-        	}
-        }
 	}
 
 	public Object deserialization(File f) {
@@ -55,15 +46,6 @@ public class CompetitionDao {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		finally{
-        	try{
-        		fInput.close();
-        		oInput.close();
-        	}
-        	catch(Exception ex){
-        		throw new RuntimeException(ex);
-        	}
-        }
 		return result;
 	}
 }

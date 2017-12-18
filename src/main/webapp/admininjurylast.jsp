@@ -42,25 +42,9 @@ File f=new File("matchiinjury.xml");
     }
                  
     
-    public void adminPart() throws MalformedURLException{
-    	String month="";
-    	String date="";
-    	int m=new Date().getMonth()+1;
-    	int d=new Date().getDate();
-    	if(m<10){
-    		month="0"+m;
-    	}
-    	else{
-    		month=""+m;
-    	}
-    	if(d<10){
-    		date="0"+d;
-    	}
-    	else{
-    		date=""+d;
-    	}
-        
-        String strUrl="https://www.sofascore.com/football//2017-"+month+"-"+date+"/json?_="+new Date().getTime()/10000;
+    public void adminPart(String month,String date) throws MalformedURLException{
+
+        String strUrl="https://www.sofascore.com/football//2017-"+month+"-"+date+"/json?_="+new Date(new Date().getYear(),Integer.valueOf(month)-1,Integer.valueOf(date),23,59,60).getTime()/10000;
         URL url = new URL(strUrl);
     	
         serialization(Parser.parse(url,month,date),f);
@@ -79,5 +63,5 @@ File f=new File("matchiinjury.xml");
 %>
 
 <%
-adminPart();
+adminPart(request.getParameter("month"),request.getParameter("date"));
 %>

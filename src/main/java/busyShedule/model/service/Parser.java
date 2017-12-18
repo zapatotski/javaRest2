@@ -24,6 +24,7 @@ public class Parser {
 	static Map<Integer, List<Team>> mapCompetition = new HashMap();
 
 	public static Map<Integer, List<Game>> parse(String[] hrefs) {
+		mark:
 		for (String href : hrefs) {
 			// map id_team-team chtob ne ozdavat noviy komandy
 			Map<Integer, Team> mapTeamComp = new HashMap();
@@ -33,126 +34,137 @@ public class Parser {
 			int compId = 0;
 			String startWeak = "";
 			String endWeak = "";
-			try {
-				Document doc = Jsoup.connect(href).get();
-
-				Elements countryElements = doc.select("results");
-				if (countryElements.isEmpty())
-					continue;
-
-				Element countryElement = countryElements.first();
-				country = countryElement.attr("country");
-
-				Elements tournamentElements = doc.select("tournament");
-				if (tournamentElements.isEmpty())
-					continue;
-
-				Element tournamentElement = tournamentElements.first();
-				compName = tournamentElement.attr("league");
+			
+			Document doc=null;
+			int pop=0;
+			while(true) {
 				try {
-					compId = Integer.valueOf(tournamentElement.attr("id"));
+					doc = Jsoup.connect(href).get();
+					break;
+				}
+				catch(IOException ex) {
+					pop++;
+					if(pop==3)
+						continue mark;
+					try {
+						Thread.currentThread().sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			Elements countryElements = doc.select("results");
+			if (countryElements.isEmpty())
+				continue;
+
+			Element countryElement = countryElements.first();
+			country = countryElement.attr("country");
+
+			Elements tournamentElements = doc.select("tournament");
+			if (tournamentElements.isEmpty())
+				continue;
+
+			Element tournamentElement = tournamentElements.first();
+			compName = tournamentElement.attr("league");
+			try {
+				compId = Integer.valueOf(tournamentElement.attr("id"));
+			} catch (Exception e) {
+				continue;
+			}
+
+			Elements matchElements = doc.select("match");
+			if (matchElements.isEmpty())
+				continue;
+
+			startWeak = matchElements.first().attr("date");
+			endWeak = matchElements.last().attr("date");
+
+			String nextWeak = "";
+
+			// inizializiruem orevnovanie
+			competition = new Competition(compId, compName, country, startWeak, nextWeak, endWeak, null);
+
+			Boolean b = true;
+			int gameId = 0;
+			String date = "";
+			int team1Id = 0;
+			String team1Name = "";
+			int team2Id = 0;
+			String team2Name = "";
+
+			for (int j = 0; j < matchElements.size(); j++) {
+				try {
+					gameId = Integer.valueOf(matchElements.get(j).attr("id"));
+				} catch (Exception e) {
+					continue;
+				}
+				date = matchElements.get(j).attr("date");
+				int[] dataArr = toIntArray(date);
+				if (dataArr.length != 3)
+					continue;
+
+				if ((!matchElements.get(j).attr("status").equals("FT")) && b) {
+					nextWeak = matchElements.get(j).attr("date");
+					b = false;
+				}
+
+				Elements team1Elements = matchElements.get(j).select("localteam");
+				Elements team2Elements = matchElements.get(j).select("visitorteam");
+				try {
+					team1Id = Integer.valueOf(team1Elements.first().attr("id"));
+					team1Name = team1Elements.first().attr("name");
+					team2Id = Integer.valueOf(team2Elements.first().attr("id"));
+					team2Name = team2Elements.first().attr("name");
 				} catch (Exception e) {
 					continue;
 				}
 
-				Elements matchElements = doc.select("match");
-				if (matchElements.isEmpty())
-					continue;
+				if (!mapTeamComp.containsKey(team1Id))
+					mapTeamComp.put(team1Id, new Team(team1Id, team1Name));
+				if (!mapTeamComp.containsKey(team2Id))
+					mapTeamComp.put(team2Id, new Team(team2Id, team2Name));
 
-				startWeak = matchElements.first().attr("date");
-				endWeak = matchElements.last().attr("date");
+				// vozmozen Exception v new Date();
+				Game g = new Game(gameId, mapTeamComp.get(team1Id), mapTeamComp.get(team2Id), competition,
+						new Date(dataArr[2] - 1900, dataArr[1] - 1, dataArr[0]));
 
-				String nextWeak = "";
+				if (!mapGame.containsKey(team1Id))
+					mapGame.put(team1Id, new PriorityQueue<Game>(new Comparator<Game>() {
+						public int compare(Game t, Game t1) {
+							if (t.date.getTime() < t1.date.getTime())
+								return -1;
+							if (t.date.getTime() > t1.date.getTime())
+								return 1;
+							else
+								return 0;
+						}
+					}));
 
-				// inizializiruem orevnovanie
-				competition = new Competition(compId, compName, country, startWeak, nextWeak, endWeak, null);
+				if (!mapGame.containsKey(team2Id))
+					mapGame.put(team2Id, new PriorityQueue<Game>(new Comparator<Game>() {
+						public int compare(Game t, Game t1) {
+							if (t.date.getTime() < t1.date.getTime())
+								return -1;
+							if (t.date.getTime() > t1.date.getTime())
+								return 1;
+							else
+								return 0;
+						}
+					}));
 
-				Boolean b = true;
-				int gameId = 0;
-				String date = "";
-				int team1Id = 0;
-				String team1Name = "";
-				int team2Id = 0;
-				String team2Name = "";
-
-				for (int j = 0; j < matchElements.size(); j++) {
-					try {
-						gameId = Integer.valueOf(matchElements.get(j).attr("id"));
-					} catch (Exception e) {
-						continue;
-					}
-					date = matchElements.get(j).attr("date");
-					int[] dataArr = toIntArray(date);
-					if (dataArr.length != 3)
-						continue;
-
-					if ((!matchElements.get(j).attr("status").equals("FT")) && b) {
-						nextWeak = matchElements.get(j).attr("date");
-						b = false;
-					}
-
-					Elements team1Elements = matchElements.get(j).select("localteam");
-					Elements team2Elements = matchElements.get(j).select("visitorteam");
-					try {
-						team1Id = Integer.valueOf(team1Elements.first().attr("id"));
-						team1Name = team1Elements.first().attr("name");
-						team2Id = Integer.valueOf(team2Elements.first().attr("id"));
-						team2Name = team2Elements.first().attr("name");
-					} catch (Exception e) {
-						continue;
-					}
-
-					if (!mapTeamComp.containsKey(team1Id))
-						mapTeamComp.put(team1Id, new Team(team1Id, team1Name));
-					if (!mapTeamComp.containsKey(team2Id))
-						mapTeamComp.put(team2Id, new Team(team2Id, team2Name));
-
-					// vozmozen Exception v new Date();
-					Game g = new Game(gameId, mapTeamComp.get(team1Id), mapTeamComp.get(team2Id), competition,
-							new Date(dataArr[2] - 1900, dataArr[1] - 1, dataArr[0]));
-
-					if (!mapGame.containsKey(team1Id))
-						mapGame.put(team1Id, new PriorityQueue<Game>(11,new Comparator<Game>() {
-							public int compare(Game t, Game t1) {
-								if (t.date.getTime() < t1.date.getTime())
-									return -1;
-								if (t.date.getTime() > t1.date.getTime())
-									return 1;
-								else
-									return 0;
-							}
-						}));
-
-					if (!mapGame.containsKey(team2Id))
-						mapGame.put(team2Id, new PriorityQueue<Game>(11,new Comparator<Game>() {
-							public int compare(Game t, Game t1) {
-								if (t.date.getTime() < t1.date.getTime())
-									return -1;
-								if (t.date.getTime() > t1.date.getTime())
-									return 1;
-								else
-									return 0;
-							}
-						}));
-
-					mapGame.get(team1Id).add(g);
-					mapGame.get(team2Id).add(g);
-				}
-
-				competition.nextWeak = nextWeak;
-				competition.teams = new ArrayList(mapTeamComp.values());
-
-				if (!mapCompetition.containsKey(competition.id))
-					mapCompetition.put(competition.id, competition.teams);
-				else{
-                    mapCompetition.remove(competition.id);
-					mapCompetition.put(competition.id, competition.teams);				
-				}
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mapGame.get(team1Id).add(g);
+				mapGame.get(team2Id).add(g);
 			}
+
+			competition.nextWeak = nextWeak;
+			competition.teams = new ArrayList(mapTeamComp.values());
+
+			if (!mapCompetition.containsKey(competition.id))
+				mapCompetition.put(competition.id, competition.teams);
+			else
+				mapCompetition.replace(competition.id, competition.teams);
 
 		}
 

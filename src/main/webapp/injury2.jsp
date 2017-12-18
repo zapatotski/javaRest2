@@ -10,25 +10,17 @@
 <%@ page import="java.util.*" %>
 <%@ page import="live.Game" %>
 <%@ page import="live.Player" %>
+<%@ page import="injury.Parser" %>
 
 
 
 <%! 
 
-File dir = new File(".");
-
-public File[] sortFile(File[] fs){
-	Arrays.sort(fs);
-	return fs;
-}
-
-public Map<String,List<Game>> deserialization(File f){
-	FileInputStream fInput=null;
+public Map<String,List<Game>> deserialization(InputStream f){
 	ObjectInputStream oInput=null;
 	Map<String,List<Game>> q=null;
 	try{
-		fInput=new FileInputStream(f);
-		oInput=new ObjectInputStream(fInput);
+		oInput=new ObjectInputStream(f);
 		q=(Map<String,List<Game>>) oInput.readObject();
 	}
 	catch(Exception e){
@@ -37,7 +29,7 @@ public Map<String,List<Game>> deserialization(File f){
 	return q;
 }
 
-public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, File[] files){
+public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, InputStream[] files){
 	for(int i=files.length-3;i>files.length-7;i--){
 		Map<String, List<Game>> lastlist=deserialization(files[i]);
 		for(String s:lastlist.keySet()){
@@ -69,7 +61,6 @@ public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, File[] file
 	return m;
 }
 
-    
 %>
 
 <head>
@@ -238,21 +229,24 @@ setInterval(function(){
                         <a href="#" style="margin-left:-5px;background:#808080;color:white;padding:10px;border:1px solid black;display:inline-block;font-weight:bold;">Замены по травме</a>
 			<div style="float:right"><i>Последнее обновление данных:
 				<%   
-				FileReader reader = new FileReader(new File("obnovinjury.txt"));
-				String s="";
-				try {
-				           // читаем посимвольно
-				            int c;
-				            while((c=reader.read())!=-1){
-				                 
-				                s+=(char)c;
-				            } 
-				        }
-				        catch(IOException ex){
-				             
-				            System.out.println(ex);
-				        }
-				out.print(new Date(Long.valueOf(s)+10800000).toLocaleString());
+				File timeF=new File("obnovinjury.txt");
+			    if(timeF.exists()){
+					FileReader reader = new FileReader(timeF);
+					String s="";
+					try {
+					           // читаем посимвольно
+					            int c;
+					            while((c=reader.read())!=-1){
+					                 
+					                s+=(char)c;
+					            } 
+					        }
+					        catch(IOException ex){
+					             
+					            System.out.println(ex);
+					        }
+					out.print(new Date(Long.valueOf(s)+10800000).toLocaleString());
+				}
 				%> 
 			</i></div>
 		</div>
@@ -265,18 +259,16 @@ setInterval(function(){
 		        <li><a href="/injury4.jsp">4 дня назад</a></li>
 		        <li><a href="/injury5.jsp">5 дней назад</a></li>
 		        <li><a href="/injury6.jsp">6 дней назад</a></li>
+		        <li><a href="/injury7.jsp">7 дней назад</a></li>
+		        
 	        </ul>
 		</nav>
 		<div class="content">
 		<div style="clear:both"></div>
 			<%	
-			File[] files = dir.listFiles(new FilenameFilter() {
-			    public boolean accept(File dir, String name) {
-			        return name.toLowerCase().endsWith(".inj");
-			    }
-			});
-			Map<String,List<Game>> map=deserialization(sortFile(files)[files.length>5 ? files.length-2:0]);
-			map=addLastGames(map,sortFile(files));
+			InputStream[] mas=Parser.createInputStreamForInjury();
+			Map<String,List<Game>> map=deserialization(mas[5]);
+			map=addLastGames(map,mas);
 			Set key=map.keySet();
 			
 			for(Object k:key){

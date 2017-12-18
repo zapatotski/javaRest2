@@ -27,38 +27,6 @@ public Map<String,List<Game>> deserialization(InputStream f){
 	}
 	return q;
 }
-
-public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, InputStream[] files){
-	for(int i=files.length-4;i>files.length-7;i--){
-		Map<String, List<Game>> lastlist=deserialization(files[i]);
-		for(String s:lastlist.keySet()){
-			if(m.containsKey(s)){
-				for(Game g:lastlist.get(s)){
-					int day=(new Date().getDate()-(files.length-i));
-					int month=new Date().getMonth()+1;
-					if(day<0){
-						day=32-(files.length-i);
-						month=new Date().getMonth();
-					}
-					
-					String strDay="";
-					if(day<10)
-						strDay="0"+day;
-					else
-						strDay=""+day;
-					String strMonth="";
-					if(month<10)
-						strMonth="0"+month;
-					else
-						strMonth=""+month;
-					g.time=strDay+"."+strMonth;
-					m.get(s).add(g);
-				}
-			}
-		}
-	}
-	return m;
-}
     
 %>
 
@@ -207,18 +175,6 @@ public Map<String,List<Game>> addLastGames(Map<String,List<Game>> m, InputStream
 		
 			}(window.jQuery);
 	</script>
-
-<script type="text/javascript">
-
-setInterval(function(){
-	var nod=document.getElementsByName("pan");
-	for(var i=0;i<nod.length;i++){
-	  if(nod[i].style.height != "0px")
-		  nod[i].style.height='auto';
-	}
-	},3000);
-
-</script>
 </head>
 <body>
 	<div class="container" style="margin-top:20px;">
@@ -253,40 +209,29 @@ setInterval(function(){
 		        <li><a href="/injury.jsp">Сегодня</a></li>
 		        <li><a href="/injury1.jsp">Вчера</a></li>
 		        <li><a href="/injury2.jsp">Позавчера</a></li>
-		        <li class="active"><a href="#">3 дня назад</a></li>
+		        <li><a href="/injury3.jsp">3 дня назад</a></li>
 		        <li><a href="/injury4.jsp">4 дня назад</a></li>
 		        <li><a href="/injury5.jsp">5 дней назад</a></li>
 		        <li><a href="/injury6.jsp">6 дней назад</a></li>
-		        <li><a href="/injury7.jsp">7 дней назад</a></li>
+		        <li class="active"><a href="#">7 дней назад</a></li>
 	        </ul>
 		</nav>
 		<div class="content">
 		<div style="clear:both"></div>
-			<%		
+			<%
 			InputStream[] mas=Parser.createInputStreamForInjury();
-			Map<String,List<Game>> map=deserialization(mas[4]);
-			map=addLastGames(map,mas);
+			Map<String,List<Game>> map=deserialization(mas[0]);
 			Set key=map.keySet();
 			
 			for(Object k:key){
-				out.println("<h4 style=\"display: inline-block;\">"+k+"</h4>");
-				%>
-				     <span class="panel">
-				       <span class="panel-heading">
-				          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#<%out.print(k.hashCode());%>">
-				           Info
-				          </a>
-				       </span>
-				<%
+				out.println("<h4>"+k+"</h4>");
 				List<Game> lg=map.get(k);
-				boolean b=true;
 				for(Game g:lg){
 					String score="-";
 					if(!"".equals(g.htScore))
 						score=g.htScore;
 					if(!"".equals(g.ftScore))
 						score=g.ftScore;
-					
 					
 					List<Player> y1=new ArrayList();
 					List<Player> r1=new ArrayList();
@@ -297,17 +242,7 @@ setInterval(function(){
 					List<Player> r2=new ArrayList();
 					List<Player> s2=new ArrayList();
 					
-					if(g.time.toCharArray()[2]=='.' && b){
-					%>
-					<div id="<%out.print(k.hashCode());%>" name="pan" class="panel-collapse collapse" style="height:0px;">
-					   <div class="panel-body">
-					<%
-					b=false;
-					}
-					
 					out.println("<div style=\"text-align:center;\"><span style=\"float:left;\">"+g.time+"</span>");
-					
-					
 					for(Integer idy:g.yellow1.keySet()){
 						out.println("<img src=\"http://s1.swimg.net/gsmf/583/img/events/YC.png\" title=\""+g.yellow1.get(idy)+"\" alt=\"Yellow card\" width=\"11\" height=\"11\">");
 						y1.add(g.yellow1.get(idy));
@@ -342,13 +277,14 @@ setInterval(function(){
 						s2.add(g.subs2.get(ids));
 					}
 					%>
-				     <span class="panel">
-				       <span class="panel-heading">
-				          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#<%out.print(g.toString());%>">
+				   <span class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				     <span class="panel panel-default">
+				       <span class="panel-heading" role="tab" id="headingOne">
+				          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#<%out.print(g.toString());%>" aria-expanded="false" aria-controls="<%out.print(g.toString());%>">
 				           Info
 				          </a>
 				       </span>
-				       <div id="<%out.print(g.toString());%>" class="panel-collapse collapse">
+				       <div id="<%out.print(g.toString());%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 				         <div class="panel-body">
 				           <div style="position:relative;margin-top:15px; margin-bottom:15px;">
 				           <%
@@ -401,13 +337,11 @@ setInterval(function(){
 				           </div>
 				         </div>
 				       </div>
+				     </span>
 				   </span>
 				   <% 
 					out.println("</div>");
 				}
-				if(!b)
-					out.println("</div></div>");
-				out.println("</span>");
 			}
 			%>
 		</div>

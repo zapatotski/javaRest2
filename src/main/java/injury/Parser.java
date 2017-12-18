@@ -326,7 +326,7 @@ public class Parser {
 		    //save file
 		    InputStream inputStream = getInjury();
 		    
-		    String sql = "INSERT INTO LastDay (id,data) values ("+Integer.valueOf(new Date().getYear()+""+new Date().getMonth()+""+new Date().getDate()+""+new Date().getMinutes()+""+new Date().getSeconds())+",?)";
+		    String sql = "INSERT INTO LastDay (id,data) values ("+new Date().getMonth()+""+new Date().getDate()+""+new Date().getMinutes()+""+new Date().getSeconds()+",?)";
 		    PreparedStatement statement = conn.prepareStatement(sql);
 		    statement.setBlob(1, inputStream);
 		    statement.executeUpdate();

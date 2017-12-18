@@ -111,6 +111,14 @@ public class Parser {
 
 		        statement = null;
 		    }
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
 		}
 		return otvet;
 	}
@@ -188,6 +196,15 @@ public class Parser {
 		        } catch (SQLException sqlEx) { } // ignore
 
 		        statement = null;
+		    }
+		    
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		}
 		return otvet;
@@ -277,6 +294,15 @@ public class Parser {
 
 		        stmt = null;
 		    }
+		    
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
 		}
 	}
 	
@@ -358,6 +384,14 @@ public class Parser {
 
 		        stmt = null;
 		    }
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
 		}
 	}
 	
@@ -369,6 +403,7 @@ public class Parser {
 					int responseCode = e.getResponseCode();
 					System.out.println("RefreshInjury"+new Date().getHours() + ":" + new Date().getMinutes() + " " + responseCode);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

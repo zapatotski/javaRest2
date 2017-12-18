@@ -100,6 +100,15 @@ public class GameDao {
 
 		        statement = null;
 		    }
+		    
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
 		}
 		return (Map<Integer, List<Game>>) deserialization(otvet);
 	}
@@ -188,6 +197,15 @@ public class GameDao {
 		        } catch (SQLException sqlEx) { } // ignore
 
 		        stmt = null;
+		    }
+		    
+		    if(conn != null) {
+			    try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		}
 	}

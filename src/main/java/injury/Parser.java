@@ -245,7 +245,7 @@ public class Parser {
 				e.printStackTrace();
 			}
 		    
-		    String sql = "INSERT INTO LastDay (data) values (?) WHERE id=0";
+		    String sql = "REPLACE INTO LastDay (id,data) values (0,?)";
 		    PreparedStatement statement = conn.prepareStatement(sql);
 		    statement.setBlob(1, inputStream);
 		    statement.executeUpdate();

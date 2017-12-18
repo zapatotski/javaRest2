@@ -157,7 +157,7 @@ public class GameDao {
 				e.printStackTrace();
 			}
 		    
-		    String sql = "INSERT INTO Shedule (data) values (?) WHERE id=0";
+		    String sql = "REPLACE INTO Shedule (id,data) values (0,?)";
 		    PreparedStatement statement = conn.prepareStatement(sql);
 		    statement.setBlob(1, inputStream);
 		    statement.executeUpdate();

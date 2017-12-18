@@ -66,7 +66,7 @@ public class GameDao {
 		PreparedStatement statement=null;
 		try {
 		    //create inputstream
-	        String sql = "SELECT data FROM Shedule WHERE id=0;";
+	        String sql = "SELECT data FROM Shedule WHERE id=0";
 	        statement = conn.prepareStatement(sql);
 	        
 	        result = statement.executeQuery();
@@ -146,7 +146,7 @@ public class GameDao {
 		    rs = stmt.executeQuery("SHOW tables like 'Shedule'");
 		    
 		    if(!rs.next())
-		    	stmt.execute("CREATE TABLE Shedule (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,data BLOB)");
+		    	stmt.execute("CREATE TABLE Shedule (id INT NOT NULL PRIMARY KEY,data LONGBLOB)");
 		    
 		    //save file        
 		    InputStream inputStream=null;

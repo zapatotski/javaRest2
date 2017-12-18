@@ -234,7 +234,7 @@ public class Parser {
 		    rs = stmt.executeQuery("SHOW tables like 'LastDay'");
 		    
 		    if(!rs.next())
-		    	stmt.execute("CREATE TABLE LastDay (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,data BLOB)");
+		    	stmt.execute("CREATE TABLE LastDay (id INT NOT NULL PRIMARY KEY,data BLOB)");
 		    
 		    //save file        
 		    InputStream inputStream=null;
@@ -321,12 +321,12 @@ public class Parser {
 		    rs = stmt.executeQuery("SHOW tables like 'LastDay'");
 		    
 		    if(!rs.next())
-		    	stmt.execute("CREATE TABLE LastDay (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,data BLOB)");
+		    	stmt.execute("CREATE TABLE LastDay (id INT NOT NULL PRIMARY KEY,data BLOB)");
 		    
 		    //save file
 		    InputStream inputStream = getInjury();
 		    
-		    String sql = "INSERT INTO LastDay (data) values (?)";
+		    String sql = "INSERT INTO LastDay (id,data) values ("+Integer.valueOf(new Date().getYear()+""+new Date().getMonth()+""+new Date().getDate()+""+new Date().getMinutes()+""+new Date().getSeconds())+",?)";
 		    PreparedStatement statement = conn.prepareStatement(sql);
 		    statement.setBlob(1, inputStream);
 		    statement.executeUpdate();
